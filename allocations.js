@@ -68,24 +68,95 @@ function render(){
   return '<section class="allocation-card"><div class="allocation-card-head"><label class="allocation-title">Nom du tableau<input data-f="title" data-t="'+t.id+'" value="'+esc(t.title)+'" maxlength="70"></label><button type="button" class="danger-btn" data-a="remove-table" data-t="'+t.id+'">Supprimer</button></div><div class="allocation-overview"><div class="allocation-donut" style="background:conic-gradient('+ (stops||'#344158 0% 100%') +')"><span>'+total.toFixed(1)+' %</span></div><label class="allocation-total">Montant de référence ('+currency()+')<input type="number" min="0" step="any" data-f="amount" data-t="'+t.id+'" value="'+(Number(t.amount)||0)+'"></label></div><div class="allocation-category-head"><span>Catégorie</span><span>%</span><span>Montant</span><span></span></div>'+rows+'<div class="allocation-card-foot"><span class="allocation-status '+(balanced?'good':'bad')+'">'+(balanced?'Total équilibré : 100 %':'Total : '+total.toFixed(2)+' % — ajuster à 100 %')+'</span><button type="button" data-a="add-cat" data-t="'+t.id+'">+ Catégorie</button></div></section>';
  }).join('');
 }
+
 function bind(){
- $('addAllocationTable')?.addEventListener('click',()=>{tables.push({id:uid(),title:'Nouvelle répartition',amount:0,categories:[{id:uid(),name:'Catégorie 1',pct:100}]});save();render();});
- $('allocationTablesList')?.addEventListener('click',e=>{
-  let b=e.target.closest('[data-a]');if(!b)return;let t=tables.find(x=>x.id===b.dataset.t);if(!t)return;let i=Number(b.dataset.i);
-  if(b.dataset.a==='add-cat')t.categories.push({id:uid(),name:'Nouvelle catégorie',pct:0});
-  if(b.dataset.a==='remove-cat'){if(t.categories.length===1){alert('Conserve au moins une catégorie.');return;}t.categories.splice(i,1);}
-  if(b.dataset.a==='remove-table'){if(!confirm('Supprimer ce tableau ?'))return;tables=tables.filter(x=>x.id!==t.id);}
-  save();render();
- });
- $('allocationTablesList')?.addEventListener('change',e=>{
-  let el=e.target.closest('[data-f]');if(!el)return;let t=tables.find(x=>x.id===el.dataset.t);if(!t)return;let i=Number(el.dataset.i),f=el.dataset.f;
-  if(f==='title')t.title=el.value.trim()||'Répartition sans titre';
-  if(f==='amount')t.amount=Math.max(0,Number(el.value)||0);
-  if(f==='name'&&t.categories[i])t.categories[i].name=el.value.trim()||'Catégorie';
-  if(f==='pct'&&t.categories[i])t.categories[i].pct=Math.max(0,Math.min(100,Number(el.value)||0));
-  save();render();
- });
+
+  document.addEventListener('click', function(e){
+
+    const addTable = e.target.closest('#addAllocationTable');
+
+    if(addTable){
+      e.preventDefault();
+
+      tables.push({
+        id: uid(),
+        title: 'Nouvelle répartition',
+        amount: 0,
+        categories: [
+          {id: uid(), name: 'Catégorie 1', pct: 100}
+        ]
+      });
+
+      save();
+      render();
+      return;
+    }
+
+    const b = e.target.closest('[data-a]');
+    if(!b) return;
+
+    const t = tables.find(x => x.id === b.dataset.t);
+    if(!t) return;
+
+    const i = Number(b.dataset.i);
+
+    if(b.dataset.a === 'add-cat'){
+      t.categories.push({
+        id: uid(),
+        name: 'Nouvelle catégorie',
+        pct: 0
+      });
+    }
+
+    if(b.dataset.a === 'remove-cat'){
+      if(t.categories.length === 1){
+        alert('Conserve au moins une catégorie.');
+        return;
+      }
+      t.categories.splice(i, 1);
+    }
+
+    if(b.dataset.a === 'remove-table'){
+      if(!confirm('Supprimer ce tableau ?')) return;
+      tables = tables.filter(x => x.id !== t.id);
+    }
+
+    save();
+    render();
+  });
+
+  $('allocationTablesList').addEventListener('change', function(e){
+
+    const el = e.target.closest('[data-f]');
+    if(!el) return;
+
+    const t = tables.find(x => x.id === el.dataset.t);
+    if(!t) return;
+
+    const i = Number(el.dataset.i);
+    const f = el.dataset.f;
+
+    if(f === 'title'){
+      t.title = el.value.trim() || 'Répartition sans titre';
+    }
+
+    if(f === 'amount'){
+      t.amount = Math.max(0, Number(el.value) || 0);
+    }
+
+    if(f === 'name' && t.categories[i]){
+      t.categories[i].name = el.value.trim() || 'Catégorie';
+    }
+
+    if(f === 'pct' && t.categories[i]){
+      t.categories[i].pct = Math.max(0, Math.min(100, Number(el.value) || 0));
+    }
+
+    save();
+    render();
+  });
 }
+
 function start(){installPanel();if(!$('allocationTablesPanel'))return;bind();render();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();
