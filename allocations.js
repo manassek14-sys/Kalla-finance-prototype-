@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const KEY='kalla-finance-allocations-v1', FIN='kalla-finance-complete-v1';
+const KEY='kalla-finance-allocations-prototype-v1', FIN='kalla-finance-prototype-app-v1';
 const $=id=>document.getElementById(id), uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sum=a=>a.reduce((n,x)=>n+(Number(x.pct)||0),0);
