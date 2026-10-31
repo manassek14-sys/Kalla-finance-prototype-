@@ -4,9 +4,25 @@ const today=()=>new Date().toISOString().slice(0,10);
 const defaults={currency:'FCFA',profit:1000000,theme:'#d9b66f',main:[{id:'tithe',name:'Dîme',pct:10},{id:'salary',name:'Salaire personnel',pct:25},{id:'cash',name:'Trésorerie entreprise',pct:25},{id:'invest',name:'Fonds d’investissement',pct:40}],sub:{invest:[{name:'Business',pct:35},{name:'Immobilier',pct:25},{name:'Placements financiers',pct:15},{name:'Voyages commerciaux',pct:10},{name:'Matériel et équipements',pct:10},{name:'Formations professionnelles',pct:5}],cash:[{name:'Fonds de roulement',pct:35},{name:'Stock et marchandises',pct:20},{name:'Charges et impôts futurs',pct:15},{name:'Salaires et prestataires à venir',pct:10},{name:'Réserve d’urgence',pct:10},{name:'Maintenance et réparations',pct:5},{name:'Outils et logiciels',pct:5}],salary:[{name:'Vie courante',pct:25},{name:'Logement',pct:18},{name:'Voiture',pct:8},{name:'Mariage',pct:8},{name:'Maison à long terme',pct:12},{name:'Famille et imprévus',pct:7},{name:'Épargne de sécurité',pct:5},{name:'Détente et loisirs',pct:5},{name:'Épargne enfants',pct:5},{name:'Santé',pct:7}]},categories:{income:['Ventes','Prestations','Commissions','Loyers reçus','Autres revenus'],expense:['Achats et stock','Transport','Logement','Alimentation','Téléphone et Internet','Salaires et prestataires','Impôts et charges','Maintenance','Autres dépenses']},budgets:{},transactions:[],investments:[],businesses:[]};
 let data=load();
 function clone(x){return JSON.parse(JSON.stringify(x))}
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)return {...clone(defaults),...x,main:x.main||clone(defaults.main),sub:x.sub||clone(defaults.sub),categories:x.categories||clone(defaults.categories),transactions:x.transactions||[],investments:x.investments||[],businesses:x.businesses||[],budgets:x.budgets||{}}}catch(e){} 
-// Reprendre les réglages de l’ancienne version si présents.
-try{const old=JSON.parse(localStorage.getItem('kalla-finance-settings-v2'));if(old){const d=clone(defaults);d.currency=old.currency||d.currency;d.profit=Number(old.amount)||d.profit;d.main=(old.main||d.main).map(x=>({id:x.id,name:x.name,pct:Number(x.pct)||0}));d.sub.invest=old.invest||d.sub.invest;d.sub.cash=old.cash||d.sub.cash;d.sub.salary=old.salary||d.sub.salary;return d}}catch(e){} return clone(defaults)}
+function load(){
+  try {
+    const x = JSON.parse(localStorage.getItem(KEY));
+    if (x) {
+      return {
+        ...clone(defaults),
+        ...x,
+        main: x.main || clone(defaults.main),
+        sub: x.sub || clone(defaults.sub),
+        categories: x.categories || clone(defaults.categories),
+        transactions: x.transactions || [],
+        investments: x.investments || [],
+        businesses: x.businesses || [],
+        budgets: x.budgets || {}
+      };
+    }
+  } catch(e) {}
+  return clone(defaults);
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));$('saveState').textContent='Enregistré sur cet appareil';}
 function money(n){return new Intl.NumberFormat('fr-FR',{maximumFractionDigits:2}).format(Number(n)||0)+' '+data.currency}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
