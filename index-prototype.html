@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101511">
+  <meta name="description" content="KALLA Finance — Gestionnaire financier personnalisable">
+  <title>KALLA Finance | Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">K</div>
+        <div>
+          <strong>KALLA FINANCE</strong>
+          <span>GESTION FINANCIÈRE</span>
+        </div>
+      </div>
+
+      <nav class="navigation" aria-label="Navigation principale">
+        <button class="nav-link active" data-page="dashboard">Tableau de bord</button>
+        <button class="nav-link" data-page="income">Revenus et bénéfices</button>
+        <button class="nav-link" data-page="budget">Budget personnel</button>
+        <button class="nav-link" data-page="investment">Fonds d’investissement</button>
+        <button class="nav-link" data-page="treasury">Trésorerie</button>
+        <button class="nav-link" data-page="business">Business</button>
+        <button class="nav-link" data-page="security">Sécurité</button>
+        <button class="nav-link" data-page="reports">Rapports</button>
+        <button class="nav-link" data-page="customization">Personnalisation</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Prototype indépendant</span>
+        <small>KALLA GROUP</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button type="button" id="menu-toggle" class="menu-toggle" aria-label="Ouvrir le menu">
+          ☰
+        </button>
+
+        <div>
+          <span class="eyebrow">KALLA GROUP · FINANCE</span>
+          <h1 id="page-title">Tableau de bord</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="storage-status" id="storage-status">Sauvegarde locale activée</span>
+          <button type="button" class="button button-secondary" id="export-json">
+            Exporter les données
+          </button>
+        </div>
+      </header>
+
+      <div id="app-message" class="app-message" role="status" aria-live="polite"></div>
+
+      <!-- TABLEAU DE BORD -->
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-block">
+          <div>
+            <span class="eyebrow">VUE D’ENSEMBLE</span>
+            <h2>Votre situation financière</h2>
+            <p>Suivez vos revenus, vos réserves et vos investissements.</p>
+          </div>
+          <div class="currency-control">
+            <label for="currency">Devise</label>
+            <select id="currency">
+              <option value="FCFA">FCFA</option>
+              <option value="EUR">EUR</option>
+              <option value="RMB">RMB</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span>Bénéfice à répartir</span>
+            <strong id="dashboard-profit">0 FCFA</strong>
+            <small>Montant de référence</small>
+          </article>
+
+          <article class="summary-card">
+            <span>Salaire personnel</span>
+            <strong id="dashboard-salary">0 FCFA</strong>
+            <small>Part personnelle</small>
+          </article>
+
+          <article class="summary-card">
+            <span>Trésorerie</span>
+            <strong id="dashboard-treasury">0 FCFA</strong>
+            <small>Réserves et fonctionnement</small>
+          </article>
+
+          <article class="summary-card">
+            <span>Investissement</span>
+            <strong id="dashboard-investment">0 FCFA</strong>
+            <small>Développement des activités</small>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">RÉPARTITION PRINCIPALE</span>
+                <h3>Distribution des bénéfices</h3>
+              </div>
+              <button class="text-button" data-go="customization">Personnaliser</button>
+            </div>
+            <div id="dashboard-main-allocation"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">ACTIVITÉ</span>
+                <h3>Base de calcul</h3>
+              </div>
+            </div>
+
+            <label for="profit-input">Bénéfice disponible</label>
+            <div class="amount-input">
+              <input type="number" id="profit-input" min="0" step="any" value="1000000">
+              <span id="input-currency">FCFA</span>
+            </div>
+            <p class="help-text">
+              Modifiez ce montant pour actualiser automatiquement les répartitions.
+            </p>
+            <button type="button" class="button button-primary" id="calculate-profit">
+              Actualiser les calculs
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <!-- REVENUS ET BÉNÉFICES -->
+      <section class="page" id="page-income">
+        <div class="section-intro">
+          <span class="eyebrow">GESTION DES REVENUS</span>
+          <h2>Répartition des bénéfices</h2>
+          <p>Définissez comment le bénéfice disponible est distribué.</p>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <h3>Tableau principal de répartition</h3>
+            <span class="editable-tag">Modifiable</span>
+          </div>
+          <div id="main-allocation-editor"></div>
+        </article>
+
+        <article class="panel">
+          <h3>Montant à répartir</h3>
+          <div class="amount-input">
+            <input type="number" id="income-profit-input" min="0" step="any">
+            <span class="currency-label">FCFA</span>
+          </div>
+          <p class="help-text">
+            La dîme, le salaire, la trésorerie et le fonds d’investissement
+            sont calculés à partir de cette base.
+          </p>
+        </article>
+      </section>
+
+      <!-- BUDGET PERSONNEL -->
+      <section class="page" id="page-budget">
+        <div class="section-intro">
+          <span class="eyebrow">GESTION PERSONNELLE</span>
+          <h2>Budget du salaire</h2>
+          <p>Organisez l’utilisation de votre rémunération personnelle.</p>
+        </div>
+        <article class="panel">
+          <div class="panel-heading">
+            <h3>Répartition du salaire</h3>
+            <span class="editable-tag">Modifiable</span>
+          </div>
+          <div id="budget-table"></div>
+        </article>
+      </section>
+
+      <!-- INVESTISSEMENT -->
+      <section class="page" id="page-investment">
+        <div class="section-intro">
+          <span class="eyebrow">DÉVELOPPEMENT DU CAPITAL</span>
+          <h2>Fonds d’investissement</h2>
+          <p>Répartissez les ressources destinées à développer votre patrimoine.</p>
+        </div>
+        <article class="panel">
+          <div class="panel-heading">
+            <h3>Répartition du fonds d’investissement</h3>
+            <span class="editable-tag">Modifiable</span>
+          </div>
+          <div id="investment-table"></div>
+        </article>
+      </section>
+
+      <!-- TRÉSORERIE -->
+      <section class="page" id="page-treasury">
+        <div class="section-intro">
+          <span class="eyebrow">GESTION DES LIQUIDITÉS</span>
+          <h2>Trésorerie</h2>
+          <p>Gérez le fonctionnement, les charges, les prestataires et les réserves.</p>
+        </div>
+        <article class="panel">
+          <div class="panel-heading">
+            <h3>Répartition de la trésorerie</h3>
+            <span class="editable-tag">Modifiable</span>
+          </div>
+          <div id="treasury-table"></div>
+        </article>
+      </section>
+
+      <!-- BUSINESS -->
+      <section class="page" id="page-business">
+        <div class="section-intro">
+          <span class="eyebrow">ACTIVITÉS ÉCONOMIQUES</span>
+          <h2>Business</h2>
+          <p>Centralisez vos projets et vos tableaux de suivi personnalisés.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-heading">
+            <h3>Mes tableaux personnalisés</h3>
+            <button type="button" class="button button-primary" id="add-business-table">
+              Créer un tableau
+            </button>
+          </div>
+          <div id="business-tables"></div>
+        </div>
+      </section>
+
+      <!-- SÉCURITÉ -->
+      <section class="page" id="page-security">
+        <div class="section-intro">
+          <span class="eyebrow">PROTECTION DES DONNÉES</span>
+          <h2>Sécurité et sauvegardes</h2>
+          <p>Gérez les sauvegardes de vos données sur cet appareil.</p>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span>Stockage</span>
+            <strong>Local</strong>
+            <small>Données enregistrées dans ce navigateur</small>
+          </article>
+          <article class="summary-card">
+            <span>Synchronisation</span>
+            <strong>Non activée</strong>
+            <small>Pas de compte distant dans ce prototype</small>
+          </article>
+        </div>
+        <article class="panel">
+          <h3>Outils de sauvegarde</h3>
+          <div class="button-group">
+            <button type="button" class="button button-primary" id="security-export">
+              Télécharger une sauvegarde JSON
+            </button>
+            <label class="button button-secondary file-button" for="import-json">
+              Restaurer une sauvegarde
+            </label>
+            <input type="file" id="import-json" accept=".json,application/json" hidden>
+            <button type="button" class="button button-secondary" id="export-csv">
+              Exporter en CSV
+            </button>
+          </div>
+          <p class="help-text">
+            Conservez une copie de vos sauvegardes. L’effacement des données du navigateur
+            peut supprimer les informations enregistrées localement.
+          </p>
+        </article>
+      </section>
+
+      <!-- RAPPORTS -->
+      <section class="page" id="page-reports">
+        <div class="section-intro">
+          <span class="eyebrow">ANALYSE FINANCIÈRE</span>
+          <h2>Rapports</h2>
+          <p>Consultez les synthèses et les répartitions calculées.</p>
+        </div>
+        <article class="panel">
+          <div class="panel-heading">
+            <h3>Synthèse des répartitions</h3>
+            <button type="button" class="button button-secondary" id="print-report">
+              Imprimer le rapport
+            </button>
+          </div>
+          <div id="report-content"></div>
+        </article>
+      </section>
+
+      <!-- PERSONNALISATION -->
+      <section class="page" id="page-customization">
+        <div class="section-intro">
+          <span class="eyebrow">CONFIGURATION GÉNÉRALE</span>
+          <h2>Personnalisation</h2>
+          <p>
+            Modifiez les tableaux principaux, leurs catégories et leurs pourcentages.
+            Vous pouvez également créer des tableaux supplémentaires.
+          </p>
+        </div>
+
+        <div class="customization-grid">
+          <button class="custom-card" data-custom-table="main">
+            <strong>Répartition principale</strong>
+            <span>Dîme, salaire, trésorerie et investissement</span>
+          </button>
+
+          <button class="custom-card" data-custom-table="budget">
+            <strong>Budget personnel</strong>
+            <span>Organisation du salaire</span>
+          </button>
+
+          <button class="custom-card" data-custom-table="investment">
+            <strong>Fonds d’investissement</strong>
+            <span>Business, immobilier et placements</span>
+          </button>
+
+          <button class="custom-card" data-custom-table="treasury">
+            <strong>Trésorerie</strong>
+            <span>Charges, réserves et fonctionnement</span>
+          </button>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Éditeur des tableaux</h3>
+              <p class="help-text">Sélectionnez un tableau pour le modifier.</p>
+            </div>
+            <button type="button" class="button button-primary" id="create-custom-table">
+              Nouveau tableau
+            </button>
+          </div>
+          <div id="customization-editor">
+            <p class="empty-state">
+              Sélectionnez un tableau ci-dessus ou créez un nouveau tableau.
+            </p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Mode de calcul des tableaux</h3>
+          <p>
+            Un tableau peut être lié à une catégorie de la répartition principale
+            ou fonctionner indépendamment avec son propre montant de référence.
+          </p>
+          <p class="help-text">
+            Les tableaux liés suivent automatiquement le montant de leur catégorie
+            de référence. Les tableaux indépendants utilisent le montant que vous définissez.
+          </p>
+        </article>
+      </section>
+
+      <footer class="app-footer">
+        <span>KALLA FINANCE — Prototype de gestion financière</span>
+        <span>Une initiative KALLA GROUP</span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
